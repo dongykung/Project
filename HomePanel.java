@@ -1,25 +1,35 @@
-package project;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.*;
 
-import project.HelpPanel.MyActionListener;
 public class HomePanel extends JPanel{
 	private ImageIcon background=new ImageIcon("image/homeback.jpg");
 	private Image backimg=background.getImage();
 	private ImageIcon warrior=new ImageIcon("image/warrior.png");
 	private Image warriorimg=warrior.getImage();
-	
 	private ImageIcon grassimg=new ImageIcon("image/grass.png");
 	private ImageIcon oceanimg=new ImageIcon("image/ocean.png");
 	private ImageIcon hellimg=new ImageIcon("image/hell.png");
-	
+	//이미지
 	private JButton grass,ocean,hell;
+	private JLabel money=null;
+	private WordStart word_create=new WordStart(); //단어 어레이리스트
 	
 	private Engine win=null;
+	
 	public HomePanel(Engine win) {
 		this.win=win;
 		setLayout(null);
+		
+		money=new JLabel("");
+		String getmoney=String.valueOf(Engine.money);
+		money.setText(getmoney);
+		money.setLocation(1400,0);
+		money.setSize(200,50);
+		money.setForeground(new Color(102,000,153));
+		money.setFont(new Font("Comic Sans MS",Font.ITALIC,20));
+		add(money);
 		
 		grass=new JButton(grassimg);
 		grass.setSize(185,110);
@@ -41,6 +51,7 @@ public class HomePanel extends JPanel{
 		hell.setBorderPainted(false);
 		add(hell);
 		hell.addActionListener(new MyActionListener());
+		
 	}
 	
 
@@ -60,6 +71,7 @@ public class HomePanel extends JPanel{
 		g.setColor(new Color(204,153,051));
 		g.setFont(new Font("Comic Sans MS",Font.ITALIC,70));
 		g.drawString("Choose a place to explore!",180,70);
+	
 	}
 	
 	class MyActionListener implements ActionListener{
@@ -67,10 +79,8 @@ public class HomePanel extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource()==grass) {
 				win.change("GrassPanel");
-				Engine.speed=300;
 			}
 		}
 	}
-	
-}
 
+}
