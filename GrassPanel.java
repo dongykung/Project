@@ -1,3 +1,4 @@
+package project;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -34,6 +35,12 @@ public class GrassPanel extends JPanel{
 		this.win=win;
 		setLayout(null);
 		
+		createstb();
+		createrestartbt();
+		createend();
+		
+	}//생성자 종료
+	public void createstb() {
 		stb=new JButton(click);
 		stb.setLocation(680,280);
 		stb.setSize(220,80);
@@ -46,7 +53,8 @@ public class GrassPanel extends JPanel{
 				}
 			}
 		});
-		
+	}
+	public void createrestartbt() {
 		restartbt=new JButton(restart);
 		restartbt.setBounds(500,300,190,80);
 		add(restartbt);
@@ -58,6 +66,8 @@ public class GrassPanel extends JPanel{
 				}
 			}
 		});
+	}
+	public void createend() {
 		end=new JButton(back2);
 		end.setBounds(720,300,190,80);
 		add(end);
@@ -68,18 +78,17 @@ public class GrassPanel extends JPanel{
 					win.change("HomePanel");
 					end.setVisible(false);
 					restartbt.setVisible(false);
-					stb.setVisible(true);
+					createstb();
 				}
 			}
 		});
-		
+
+	}
+	public void createinput() {
 		input.setLocation(45,580);
 		input.setSize(150,50);
 		input.setFont(new Font("Aharoni", Font.PLAIN, 20));
 		add(input);//단어 입력창 추가
-	
-		
-		//단어입력햇을 시 이벤트리스너
 		input.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				synchronized(monster) {
@@ -88,14 +97,15 @@ public class GrassPanel extends JPanel{
 					for (int i=0; i < monster.size(); i++) {
 						String text = monster.get(i).getText();
 						if(text.equals(inWord)) { // 단어맞추기 성공
-							if(count==0) { //몬스터 체력이 0일때 모든 단어들 삭제
-								for(int j=0;j<monster.size();j++) {
-									remove(monster.get(j)); 
-							     	monster.remove(j);
-							     	repaint();
-								}
-					     		gameout();
-					     		break;
+							if(count==0) {
+								removeAll();
+								createrestartbt();
+								createend();
+								drawcount();
+								gameout();
+								revalidate();
+								repaint();
+								break;
 								}
 							//System.out.println(inWord + " 맞춤"); // 콘솔확인용
 					     	remove(monster.get(i)); // 패널에서 몬스터 제거
@@ -104,7 +114,6 @@ public class GrassPanel extends JPanel{
 					     	repaint();
 					     	answer.setText(null);
 					     	count--;
-					     	Engine.money+=10;
 							break; //맞췃으면 반복문 탈출
 						}
 						else
@@ -116,14 +125,13 @@ public class GrassPanel extends JPanel{
 				
 			} 
 		});//이벤트리스너 종료
-		
-	}//생성자 종료
-	
+	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(backimg,0,0,getWidth(),getHeight(),this);
 		g.drawImage(warrior2img,20,230,170,300,this);
 	}
+
 	public void createthread() {
 		 wordthread=new WordThread(monster);
 		 dropthread=new DropWordThread(monster);
@@ -132,10 +140,10 @@ public class GrassPanel extends JPanel{
 
 	public void gamestart() {
 		count=1;
+		createinput();
 		createthread();
 		drawcount();
 		end.setVisible(false);
-		
 		restartbt.setVisible(false);
 		dropthread.start();
 		wordthread.start();
@@ -175,8 +183,6 @@ public class GrassPanel extends JPanel{
 		monsterLabel.setFont(new Font("Aharoni", Font.BOLD, 20));
 		monsterLabel.setForeground(new Color(000,051,204));
 		int startY = (int) (Math.random()*650);
-	
-		
 		monsterLabel.setLocation(1400,startY);
 		monster.addElement(monsterLabel);
 		monsterLabel.setOpaque(false); // 배경 투명하게
