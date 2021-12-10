@@ -6,20 +6,22 @@ import java.util.*;
 import java.io.*;
 
 public class GrassPanel extends JPanel{
-	private int count=10;
+	private int count;
 	private ImageIcon background=new ImageIcon("image/homeback.jpg");
 	private Image backimg=background.getImage();
 	private ImageIcon warrior2=new ImageIcon("image/warrior2.png");
 	private Image warrior2img=warrior2.getImage();
+	private ImageIcon Boss=new ImageIcon("image/goblin.png");
+	private Image Goblin=Boss.getImage();
 	private ImageIcon click=new ImageIcon("image/grassstart.png");
 	private ImageIcon back2=new ImageIcon("image/back2.png");
 	private ImageIcon restart=new ImageIcon("image/restart.png");
-	
 	private Vector<JLabel>monster = new Vector<JLabel>();//날라오는 단어벡터
 
 	private JTextField input = new JTextField(30);//입력창
 	private JButton stb,restartbt,end;
 	private JLabel countlabel=new JLabel("");
+	private JLabel bossinfo;
 	
 	
 	//스레드
@@ -97,7 +99,7 @@ public class GrassPanel extends JPanel{
 					for (int i=0; i < monster.size(); i++) {
 						String text = monster.get(i).getText();
 						if(text.equals(inWord)) { // 단어맞추기 성공
-							if(count==0) {
+							if(count==0) {  //몬스터 목숨이 0이면 탐험 종료
 								removeAll();
 								createrestartbt();
 								createend();
@@ -130,6 +132,7 @@ public class GrassPanel extends JPanel{
 		super.paintComponent(g);
 		g.drawImage(backimg,0,0,getWidth(),getHeight(),this);
 		g.drawImage(warrior2img,20,230,170,300,this);
+		g.drawImage(Goblin,1250,100,250,500,this);
 	}
 
 	public void createthread() {
@@ -139,10 +142,11 @@ public class GrassPanel extends JPanel{
 	}
 
 	public void gamestart() {
-		count=1;
+		count=12;
+		drawbossinfo();
+		drawcount();
 		createinput();
 		createthread();
-		drawcount();
 		end.setVisible(false);
 		restartbt.setVisible(false);
 		dropthread.start();
@@ -159,13 +163,21 @@ public class GrassPanel extends JPanel{
 		
 		
 	}
+	 public void drawbossinfo() {
+		 bossinfo=new JLabel("HP:");
+		 bossinfo.setLocation(1350,550);
+		 bossinfo.setSize(100,100);
+		 bossinfo.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
+		 bossinfo.setForeground(new Color(255,051,051));
+		 add(bossinfo);
+	 }
 	 public void drawcount() {
 			String HP=String.valueOf(count);
 			countlabel.setText(HP);
 			countlabel.setSize(100,100);
 			countlabel.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
 			countlabel.setForeground(new Color(255,051,051));
-			countlabel.setLocation(1400,580);
+			countlabel.setLocation(1400,550);
 			countlabel.setVisible(true);
 			add(countlabel);
 	 }
@@ -182,8 +194,8 @@ public class GrassPanel extends JPanel{
 		monsterLabel.setSize(150,60);
 		monsterLabel.setFont(new Font("Aharoni", Font.BOLD, 20));
 		monsterLabel.setForeground(new Color(000,051,204));
-		int startY = (int) (Math.random()*650);
-		monsterLabel.setLocation(1400,startY);
+		int startY = (int) (Math.random()*600+30);
+		monsterLabel.setLocation(1250,startY);
 		monster.addElement(monsterLabel);
 		monsterLabel.setOpaque(false); // 배경 투명하게
 		add(monsterLabel);
