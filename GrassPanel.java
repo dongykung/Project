@@ -16,12 +16,14 @@ public class GrassPanel extends JPanel{
 	private ImageIcon click=new ImageIcon("image/grassstart.png");
 	private ImageIcon back2=new ImageIcon("image/back2.png");
 	private ImageIcon restart=new ImageIcon("image/restart.png");
+	private ImageIcon lifeimg=new ImageIcon("image/heart.png");
 	private Vector<JLabel>monster = new Vector<JLabel>();//날라오는 단어벡터
 
 	private JTextField input = new JTextField(30);//입력창
 	private JButton stb,restartbt,end;
 	private JLabel countlabel=new JLabel("");
 	private JLabel bossinfo;
+	private JLabel []life;
 	
 	
 	//스레드
@@ -42,6 +44,17 @@ public class GrassPanel extends JPanel{
 		createend();
 		
 	}//생성자 종료
+	public void createlife() {
+		life=new JLabel[3];
+		for (int i = 0; i < life.length; i++) {
+			life[i] = new JLabel(lifeimg);
+			life[i].setOpaque(false);
+			life[i].setBounds(200 + (i * 80), 580, 50, 50);
+			add(life[i]);
+			life[i].setBorder(javax.swing.BorderFactory.createEmptyBorder());
+			life[i].setVisible(true); // 생명을 보여주는 JLabel을 만들어서 추가한다
+		}
+	}
 	public void createstb() {
 		stb=new JButton(click);
 		stb.setLocation(680,280);
@@ -147,6 +160,7 @@ public class GrassPanel extends JPanel{
 		drawcount();
 		createinput();
 		createthread();
+		createlife();
 		end.setVisible(false);
 		restartbt.setVisible(false);
 		dropthread.start();
@@ -194,7 +208,7 @@ public class GrassPanel extends JPanel{
 		monsterLabel.setSize(150,60);
 		monsterLabel.setFont(new Font("Aharoni", Font.BOLD, 20));
 		monsterLabel.setForeground(new Color(000,051,204));
-		int startY = (int) (Math.random()*600+30);
+		int startY = (int) (Math.random()*500+30);
 		monsterLabel.setLocation(1250,startY);
 		monster.addElement(monsterLabel);
 		monsterLabel.setOpaque(false); // 배경 투명하게
@@ -212,7 +226,7 @@ public class GrassPanel extends JPanel{
 			generateWord();
 			
 			try {
-				sleep(1500);
+				sleep(1000);
 			} catch (InterruptedException e) {
 				return;
 			}
